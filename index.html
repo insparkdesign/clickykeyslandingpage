@@ -526,30 +526,6 @@ h1.headline .hi { color: var(--green); text-shadow: var(--glow-gs); }
 }
 .fact-card p { font-size: .82rem; color: var(--muted); line-height: 1.65; }
 
-/* ─────────────────────────────────────
-   STATS SECTION
-───────────────────────────────────── */
-.stats-grid {
-  display: grid; grid-template-columns: repeat(3,1fr); gap: 20px;
-}
-.stat-card {
-  text-align: center;
-  background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
-  padding: 44px 24px; position: relative; overflow: hidden;
-}
-.stat-card::after {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg,transparent,var(--green),transparent);
-}
-.stat-num {
-  font-family: var(--mono);
-  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
-  font-weight: 800; color: var(--green);
-  text-shadow: var(--glow-gs); line-height: 1; margin-bottom: 10px;
-  letter-spacing: -.03em; word-break: break-all;
-}
-.stat-label { font-family: var(--mono); font-size: .78rem; color: var(--muted); }
-.stat-sub   { font-family: var(--mono); font-size: .62rem; color: #3a3a3a; margin-top: 4px; }
 
 /* ─────────────────────────────────────
    CTA SECTION
@@ -704,13 +680,9 @@ footer {
   footer { padding: 48px 24px; }
   .why-grid { grid-template-columns: 1fr; }
   .facts-grid { grid-template-columns: 1fr; }
-  .stats-grid { grid-template-columns: 1fr; gap: 14px; }
-  .stat-card { padding: 32px 20px; }
-  .stat-num { font-size: clamp(2.4rem, 10vw, 3.6rem) !important; }
   .demo-cta-pop { flex-direction: column; text-align: center; }
   .tag { font-size: .82rem; letter-spacing: .14em; }
   .sh { font-size: clamp(1.9rem, 7vw, 2.8rem) !important; }
-  .stat-num { font-size: clamp(1.6rem, 8vw, 2.4rem) !important; }
   .kb-chassis {
     padding: 20px 14px 24px; /* more breathing room top/bottom */
     overflow: hidden;
@@ -953,30 +925,6 @@ footer {
 </div>
 
 
-<div class="divider" data-t="// stats"></div>
-
-<!-- ╔══ STATS ══╗ -->
-<section class="section" id="stats">
-  <div class="tag">Live stats</div>
-  <h2 class="sh reveal">Actually <span class="g">real numbers.</span></h2>
-  <p class="sd reveal">Tracked live in your browser. No fakes, no padding.</p>
-  <div class="stats-grid reveal-kids">
-    <div class="stat-card">
-      <div class="stat-num" id="stat-session-keys">0</div>
-      <div class="stat-label">Keys you've pressed</div>
-      <div class="stat-sub">on this page, this session</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num" id="stat-most-key">—</div>
-      <div class="stat-label">Your most used key</div>
-      <div class="stat-sub">in this session</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num" id="stat-visits">1</div>
-      <div class="stat-label">Your visit count</div>
-    </div>
-  </div>
-</section>
 
 <!-- ╔══ CTA ══╗ -->
 <div class="cta-section" id="cta">
@@ -1259,42 +1207,6 @@ function scheduleLightning() {
   }, 350 + Math.random() * 1100);
 }
 scheduleLightning();
-
-/* ─────────────────────────────────────
-   STATS TRACKING (real session data)
-───────────────────────────────────── */
-let sessionKeyCount = 0;
-const sessionKeyFreq = {};
-
-function updateStatDisplay() {
-  const countEl = document.getElementById('stat-session-keys');
-  if (countEl) countEl.textContent = sessionKeyCount.toLocaleString();
-  const mostEl = document.getElementById('stat-most-key');
-  if (mostEl) {
-    const top = Object.entries(sessionKeyFreq).sort((a, b) => b[1] - a[1])[0];
-    if (top) mostEl.textContent = top[0];
-  }
-}
-
-document.addEventListener('keydown', function(e) {
-  if (e.repeat) return;
-  const label = e.code === 'Space' ? 'SPACE'
-    : e.key.length === 1 ? e.key.toUpperCase()
-    : e.code.replace(/^Key/, '').substring(0, 5);
-  sessionKeyCount++;
-  if (label.length <= 5) sessionKeyFreq[label] = (sessionKeyFreq[label] || 0) + 1;
-  updateStatDisplay();
-});
-
-/* Visit counter — persists across sessions in localStorage */
-(function() {
-  try {
-    const v = parseInt(localStorage.getItem('ck_visits') || '0') + 1;
-    localStorage.setItem('ck_visits', v);
-    const el = document.getElementById('stat-visits');
-    if (el) el.textContent = v.toLocaleString();
-  } catch(_) {}
-})();
 
 /* ─────────────────────────────────────
    KEYBOARD DEMO — AUTO TYPER
