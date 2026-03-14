@@ -686,10 +686,12 @@ footer {
   .tag { font-size: .82rem; letter-spacing: .14em; }
   .sh { font-size: clamp(1.9rem, 7vw, 2.8rem) !important; }
   .kb-chassis {
-    padding: 20px 14px 24px; /* more breathing room top/bottom */
+    padding: 20px 14px 24px;
     overflow: hidden;
     touch-action: pan-y;
   }
+  .kb-inner { min-width: 0 !important; }
+  .kbd-wrap { overflow: hidden; padding-bottom: 0; }
   .kb-shell {
     height: auto;
     margin: 0 12px; /* side breathing room from screen edges */
