@@ -963,18 +963,17 @@ footer {
   <div class="stats-grid reveal-kids">
     <div class="stat-card">
       <div class="stat-num" id="stat-session-keys">0</div>
-      <div class="stat-label">Keys typed this demo</div>
-      <div class="stat-sub">counting live as you watch</div>
+      <div class="stat-label">Keys you've pressed</div>
+      <div class="stat-sub">on this page, this session</div>
     </div>
     <div class="stat-card">
       <div class="stat-num" id="stat-most-key">—</div>
-      <div class="stat-label">Most typed key</div>
+      <div class="stat-label">Your most used key</div>
       <div class="stat-sub">in this session</div>
     </div>
     <div class="stat-card">
       <div class="stat-num" id="stat-visits">1</div>
       <div class="stat-label">Your visit count</div>
-      <div class="stat-sub">saved in your browser</div>
     </div>
   </div>
 </section>
@@ -1267,20 +1266,25 @@ scheduleLightning();
 let sessionKeyCount = 0;
 const sessionKeyFreq = {};
 
-function trackKeyStroke(ch) {
-  sessionKeyCount++;
-  const label = ch === ' ' ? 'SPACE' : ch.toUpperCase();
-  if (label.length <= 5) sessionKeyFreq[label] = (sessionKeyFreq[label] || 0) + 1;
-
+function updateStatDisplay() {
   const countEl = document.getElementById('stat-session-keys');
   if (countEl) countEl.textContent = sessionKeyCount.toLocaleString();
-
   const mostEl = document.getElementById('stat-most-key');
   if (mostEl) {
     const top = Object.entries(sessionKeyFreq).sort((a, b) => b[1] - a[1])[0];
     if (top) mostEl.textContent = top[0];
   }
 }
+
+document.addEventListener('keydown', function(e) {
+  if (e.repeat) return;
+  const label = e.code === 'Space' ? 'SPACE'
+    : e.key.length === 1 ? e.key.toUpperCase()
+    : e.code.replace(/^Key/, '').substring(0, 5);
+  sessionKeyCount++;
+  if (label.length <= 5) sessionKeyFreq[label] = (sessionKeyFreq[label] || 0) + 1;
+  updateStatDisplay();
+});
 
 /* Visit counter — persists across sessions in localStorage */
 (function() {
@@ -1331,7 +1335,6 @@ function trackKeyStroke(ch) {
 
     text += ch;
     out.textContent = text;
-    trackKeyStroke(ch); /* track for real stats */
 
     if (ch === ' ') {
       flash(getKey('Space'));
