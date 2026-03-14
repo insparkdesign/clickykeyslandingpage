@@ -210,6 +210,7 @@ h1.headline .hi { color: var(--green); text-shadow: var(--glow-gs); }
   width: 100%; max-width: 960px;
   opacity: 0; animation: riseIn .9s ease 1s forwards;
   overflow-x: auto; padding-bottom: 8px;
+  pointer-events: none; /* display only — auto-typer runs via JS, not user input */
 }
 .kbd-wrap::-webkit-scrollbar { height: 4px; }
 .kbd-wrap::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
@@ -952,6 +953,32 @@ footer {
 </div>
 
 
+<div class="divider" data-t="// stats"></div>
+
+<!-- ╔══ STATS ══╗ -->
+<section class="section" id="stats">
+  <div class="tag">Live stats</div>
+  <h2 class="sh reveal">Actually <span class="g">real numbers.</span></h2>
+  <p class="sd reveal">Tracked live in your browser. No fakes, no padding.</p>
+  <div class="stats-grid reveal-kids">
+    <div class="stat-card">
+      <div class="stat-num" id="stat-session-keys">0</div>
+      <div class="stat-label">Keys typed this demo</div>
+      <div class="stat-sub">counting live as you watch</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-most-key">—</div>
+      <div class="stat-label">Most typed key</div>
+      <div class="stat-sub">in this session</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-visits">1</div>
+      <div class="stat-label">Your visit count</div>
+      <div class="stat-sub">saved in your browser</div>
+    </div>
+  </div>
+</section>
+
 <!-- ╔══ CTA ══╗ -->
 <div class="cta-section" id="cta">
   <div class="floating-bg" id="flt-bg"></div>
@@ -1235,6 +1262,37 @@ function scheduleLightning() {
 scheduleLightning();
 
 /* ─────────────────────────────────────
+   STATS TRACKING (real session data)
+───────────────────────────────────── */
+let sessionKeyCount = 0;
+const sessionKeyFreq = {};
+
+function trackKeyStroke(ch) {
+  sessionKeyCount++;
+  const label = ch === ' ' ? 'SPACE' : ch.toUpperCase();
+  if (label.length <= 5) sessionKeyFreq[label] = (sessionKeyFreq[label] || 0) + 1;
+
+  const countEl = document.getElementById('stat-session-keys');
+  if (countEl) countEl.textContent = sessionKeyCount.toLocaleString();
+
+  const mostEl = document.getElementById('stat-most-key');
+  if (mostEl) {
+    const top = Object.entries(sessionKeyFreq).sort((a, b) => b[1] - a[1])[0];
+    if (top) mostEl.textContent = top[0];
+  }
+}
+
+/* Visit counter — persists across sessions in localStorage */
+(function() {
+  try {
+    const v = parseInt(localStorage.getItem('ck_visits') || '0') + 1;
+    localStorage.setItem('ck_visits', v);
+    const el = document.getElementById('stat-visits');
+    if (el) el.textContent = v.toLocaleString();
+  } catch(_) {}
+})();
+
+/* ─────────────────────────────────────
    KEYBOARD DEMO — AUTO TYPER
 ───────────────────────────────────── */
 (function() {
@@ -1273,6 +1331,7 @@ scheduleLightning();
 
     text += ch;
     out.textContent = text;
+    trackKeyStroke(ch); /* track for real stats */
 
     if (ch === ' ') {
       flash(getKey('Space'));
