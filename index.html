@@ -40,7 +40,7 @@ body {
   font-family: var(--sans);
   overflow-x: clip; /* clip not hidden — doesn't break position:fixed */
   width: 100%;
-  cursor: crosshair;
+  cursor: default;
   line-height: 1.6;
 }
 
@@ -755,7 +755,6 @@ footer {
   <div class="nav-links">
     <a href="#why"        class="nav-link">Why</a>
     <a href="#playground" class="nav-link">Play</a>
-    <a href="#facts"      class="nav-link">Facts</a>
     <a href="#cta"        class="nav-link">Start</a>
   </div>
 </nav>
@@ -891,24 +890,24 @@ footer {
 
 <!-- ╔══ WHY ══╗ -->
 <section class="section" id="why">
-  <div class="tag">Feature set</div>
-  <h2 class="sh reveal">Why people love<br><span class="g">clicky keyboards</span></h2>
-  <p class="sd reveal">Three reasons keyboard nerds will never go back to membrane.</p>
+  <div class="tag">Origin story</div>
+  <h2 class="sh reveal">Why I built this<br><span class="g">in the AI era.</span></h2>
+  <p class="sd reveal">The internet is fast, cold, and increasingly written by machines. I wanted to make something that felt human again.</p>
   <div class="why-grid reveal-kids">
     <div class="why-card">
-      <div class="why-key-icon">T</div>
-      <h3>Tactile Feedback</h3>
-      <p>Real keyboards give your fingers feedback. That tiny click tells your brain: something happened. Every keystroke, confirmed.</p>
+      <div class="why-key-icon">⌘</div>
+      <h3>Everything is generated. This isn't.</h3>
+      <p>In a world of AI text and auto-replies, a typed message — with real keystrokes and a little click — carries a different weight. It feels intentional. Because it is.</p>
     </div>
     <div class="why-card">
-      <div class="why-key-icon">~</div>
-      <h3>Typing Flow</h3>
-      <p>Mechanical keyboards create rhythm. Your thoughts become sound. Code becomes music. Writers call it the zone.</p>
+      <div class="why-key-icon">♥</div>
+      <h3>Cute, funny, and very sendable.</h3>
+      <p>Type something silly. Screenshot it. Send it in an email or drop it in a chat. A tiny moment of joy that's 100% human-made, zero AI slop. That's the whole idea.</p>
     </div>
     <div class="why-card">
-      <div class="why-key-icon">!</div>
-      <h3>Pure Nerd Joy</h3>
-      <p>For some people, keyboards aren't tools — they're instruments. Carefully chosen, obsessively tuned. No apologies.</p>
+      <div class="why-key-icon">↵</div>
+      <h3>Letters still matter.</h3>
+      <p>Before the internet, people wrote notes by hand. There was texture to it. ClickyKeys is a small nod to that — the charm of a typed letter, but for right now.</p>
     </div>
   </div>
 </section>
@@ -952,62 +951,6 @@ footer {
   </div>
 </div>
 
-<div class="divider" data-t="// facts"></div>
-
-<!-- ╔══ FACTS ══╗ -->
-<section class="section" id="facts">
-  <div class="tag">Keyboard science</div>
-  <h2 class="sh reveal">Keyboard nerd<br><span class="g">facts.</span></h2>
-  <p class="sd reveal">Things you'll cite at dinner parties to sound interesting.</p>
-  <div class="facts-grid reveal-kids">
-    <div class="fact-card">
-      <div class="fact-num">01</div>
-      <h3>Why mechanical keyboards feel better</h3>
-      <p>Each key has its own spring mechanism. Unlike membrane keys that bottom out on a rubber dome, mechanicals give consistent, satisfying actuation at a defined force point.</p>
-    </div>
-    <div class="fact-card">
-      <div class="fact-num">02</div>
-      <h3>What makes a key 'clicky'</h3>
-      <p>Clicky switches (like Cherry MX Blue) have a small plastic piece that snaps past a bump on keystroke. That snap is the click. Your ears and fingers are both notified.</p>
-    </div>
-    <div class="fact-card">
-      <div class="fact-num">03</div>
-      <h3>Blue vs Brown vs Red switches</h3>
-      <p>Blue = loud, clicky, satisfying. Brown = tactile bump, quieter. Red = linear, smooth, silent. Gamers like Red. Writers like Blue. Offices have opinions about all three.</p>
-    </div>
-    <div class="fact-card">
-      <div class="fact-num">04</div>
-      <h3>Why programmers love mechanical keyboards</h3>
-      <p>Tactile feedback reduces errors, physical resistance helps prevent accidental keypresses, and — honestly — they just feel incredible when you're in a flow state at 2am.</p>
-    </div>
-  </div>
-</section>
-
-<div class="divider" data-t="// stats"></div>
-
-<!-- ╔══ STATS ══╗ -->
-<section class="section" id="stats">
-  <div class="tag">Live stats</div>
-  <h2 class="sh reveal">For <span class="g">keyboard nerds.</span></h2>
-  <p class="sd reveal">Real-time data from our global playground.</p>
-  <div class="stats-grid reveal-kids">
-    <div class="stat-card">
-      <div class="stat-num" data-target="3284917">0</div>
-      <div class="stat-label">Keys pressed today</div>
-      <div class="stat-sub">across all sessions</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num" id="smashed-key">SPACE</div>
-      <div class="stat-label">Most smashed key</div>
-      <div class="stat-sub">of all time</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num" data-target="147">0</div>
-      <div class="stat-label">Fastest typer today</div>
-      <div class="stat-sub">WPM · anonymous</div>
-    </div>
-  </div>
-</section>
 
 <!-- ╔══ CTA ══╗ -->
 <div class="cta-section" id="cta">
@@ -1185,27 +1128,6 @@ function pressKey(el) {
   }
 }
 
-// Click delegation
-document.addEventListener('click', e => {
-  const k = e.target.closest('.key');
-  if (k) pressKey(k);
-});
-
-/* ─────────────────────────────────────
-   PHYSICAL KEYBOARD
-───────────────────────────────────── */
-const codeIndex = {};
-document.querySelectorAll('.key').forEach(el => {
-  const c = el.dataset.code;
-  if (!codeIndex[c]) codeIndex[c] = [];
-  codeIndex[c].push(el);
-});
-
-document.addEventListener('keydown', e => {
-  const els = codeIndex[e.code];
-  if (els) els.forEach(pressKey);
-  e.preventDefault();
-}, { passive: false });
 
 /* ─────────────────────────────────────
    RANDOM GLOW (idle ambience)
@@ -1270,24 +1192,9 @@ globalLabels.forEach((lbl, i) => {
 });
 
 /* ─────────────────────────────────────
-   STATS COUNTER
-───────────────────────────────────── */
-function animCount(el, target) {
-  let cur = 0, steps = 70;
-  const inc = target / steps;
-  const iv = setInterval(() => {
-    cur += inc;
-    if (cur >= target) { cur = target; clearInterval(iv); }
-    el.textContent = Math.floor(cur).toLocaleString();
-  }, 22);
-}
-
-/* ─────────────────────────────────────
    INTERSECTION OBSERVER
 ───────────────────────────────────── */
 const revealEls = document.querySelectorAll('.reveal, .reveal-kids');
-const counterEls = document.querySelectorAll('[data-target]');
-let countered = false;
 
 new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
@@ -1302,12 +1209,6 @@ revealEls.forEach(el => {
   }, { threshold: 0.14 }).observe(el);
 });
 
-new IntersectionObserver(entries => {
-  if (entries[0].isIntersecting && !countered) {
-    countered = true;
-    counterEls.forEach(el => animCount(el, parseInt(el.dataset.target)));
-  }
-}, { threshold: 0.3 }).observe(document.getElementById('stats'));
 
 /* Show CTA popup after 4s */
 setTimeout(() => {
